@@ -30,6 +30,9 @@ class ConfirmationSlider extends StatefulWidget {
   /// The style of the text. Defaults to TextStyle(color: Colors.black26, fontWeight: FontWeight.bold,).
   final TextStyle textStyle;
 
+  // Use Widget as child instead of a text. Useful for more advanced text formatting and styling. If not null, text will be ignored.
+  final Widget child;
+
   /// The callback when slider is completed. This is the only required field.
   final VoidCallback onConfirmation;
 
@@ -50,6 +53,7 @@ class ConfirmationSlider extends StatefulWidget {
       this.icon = Icons.chevron_right,
       this.text = "Slide to confirm",
       this.textStyle,
+      this.child,
       @required this.onConfirmation,
       this.foregroundShape,
       this.backgroundShape})
@@ -125,18 +129,22 @@ class ConfirmationSliderState extends State<ConfirmationSlider> {
       width: widget.width,
       padding: EdgeInsets.all(5),
       decoration: BoxDecoration(
-        borderRadius:
-            widget.backgroundShape ?? BorderRadius.all(Radius.circular(widget.height)),
+        borderRadius: widget.backgroundShape ??
+            BorderRadius.all(Radius.circular(widget.height)),
         color: widget.backgroundColor,
         boxShadow: <BoxShadow>[shadow],
       ),
       child: Stack(
         children: <Widget>[
           Center(
-            child: Text(
-              widget.text,
-              style: style,
-            ),
+            child: widget.child == null
+                ? Text(
+                    widget.text,
+                    style: style,
+                  )
+                : Container(
+              child: widget.child,
+              padding: EdgeInsets.only(left: widget.height),),
           ),
           Positioned(
             left: widget.height / 2,
